@@ -1,0 +1,20 @@
+@import 'tailwindcss';
+
+/* Design tokens: every color and font in the app comes from here. */
+@theme {
+  --font-sans: 'Heebo', system-ui, sans-serif;
+
+  --color-brand-50: #e9f4ed;
+  --color-brand-600: #1f7a4a;
+  --color-brand-700: #18613b;
+
+  --color-night: #16231d;
+  --color-ink: #1c2321;
+  --color-muted: #6b7570;
+  --color-surface: #f4f3ef;
+  --color-line: #e4e2dc;
+}
+
+body {
+  @apply bg-surface font-sans text-ink antialiased;
+}
