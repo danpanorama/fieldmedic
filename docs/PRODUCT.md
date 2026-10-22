@@ -18,11 +18,11 @@ Every youth and amateur match in Israel needs a licensed medic. Today a coordina
 
 ## Users and roles
 
-| Role            | Scope                     | Main job                                                |
-| --------------- | ------------------------- | ------------------------------------------------------- |
-| **Medic**       | Themself                  | Find matches, assign themself, see schedule and earnings |
-| **Coordinator** | One or more districts     | Make sure every match has a medic                       |
-| **Admin**       | Whole country             | Manage districts, coordinators, rates and imports        |
+| Role            | Scope                 | Main job                                                 |
+| --------------- | --------------------- | -------------------------------------------------------- |
+| **Medic**       | Themself              | Find matches, assign themself, see schedule and earnings |
+| **Coordinator** | One or more districts | Make sure every match has a medic                        |
+| **Admin**       | Whole country         | Manage districts, coordinators, rates and imports        |
 
 The product is built for national scale from day one: many districts, thousands of medics, and hundreds of matches every weekend.
 
