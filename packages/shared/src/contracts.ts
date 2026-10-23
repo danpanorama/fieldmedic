@@ -42,3 +42,31 @@ export interface OpenMatchesResponse {
   myMatchCount: number;
   matches: OpenMatchDto[];
 }
+
+/** POST /api/medics/:medicId/assignments */
+export interface TakeMatchRequest {
+  matchId: string;
+}
+
+export interface TakeMatchResponse {
+  assignment: { matchId: string; medicId: string };
+}
+
+/**
+ * Machine-readable reasons a request failed. The UI picks its message from the code,
+ * never by parsing the English error text.
+ */
+export type ErrorCode =
+  | 'VALIDATION_FAILED'
+  | 'NOT_FOUND'
+  | 'LICENSE_INVALID'
+  | 'MATCH_ALREADY_TAKEN'
+  | 'MATCH_STARTED'
+  | 'SCHEDULE_CLASH';
+
+/** Body of every non-2xx response. */
+export interface ApiErrorBody {
+  error: string;
+  code: ErrorCode | 'INTERNAL';
+  details?: unknown;
+}
