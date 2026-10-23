@@ -7,5 +7,6 @@ import type { Match, Venue } from './match.model';
  */
 export interface MatchSource {
   listMatches(range: { from: Date; to: Date }): Promise<Match[]>;
+  findById(id: string): Promise<Match | null>;
   listVenues(): Promise<Venue[]>;
 }
