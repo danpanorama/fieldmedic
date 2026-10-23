@@ -7,13 +7,30 @@ interface MatchCardProps {
   match: OpenMatchDto;
   /** False when the medic's license is not valid. */
   canTakeMatches: boolean;
-  /** Not wired yet: self-assignment arrives in Sprint 1. Without it, no take button is shown. */
-  onTake?: (matchId: string) => void;
+  onTake: (matchId: string) => void;
+  /** This card's take request is in flight. */
+  isTaking?: boolean;
+  /** Another card's request is in flight: one at a time. */
+  isBusy?: boolean;
 }
 
-export function MatchCard({ match, canTakeMatches, onTake }: MatchCardProps) {
+function takeButtonLabel(clashes: boolean, canTakeMatches: boolean, isTaking: boolean) {
+  if (clashes) return 'לא זמין בשעה הזו';
+  if (!canTakeMatches) return 'נדרש רישיון בתוקף';
+  if (isTaking) return 'שומר…';
+  return 'לקחת את המשחק';
+}
+
+export function MatchCard({
+  match,
+  canTakeMatches,
+  onTake,
+  isTaking = false,
+  isBusy = false,
+}: MatchCardProps) {
   const clashes = match.fit.kind === 'clash';
   const title = match.league ? `${match.ageGroup} · ${match.league}` : match.ageGroup;
+  const disabled = clashes || !canTakeMatches || isTaking || isBusy;
 
   return (
     <Card className="space-y-3">
@@ -32,17 +49,9 @@ export function MatchCard({ match, canTakeMatches, onTake }: MatchCardProps) {
 
       <FitNotice fit={match.fit} />
 
-      {clashes ? (
-        <Button fullWidth disabled>
-          לא זמין בשעה הזו
-        </Button>
-      ) : (
-        onTake && (
-          <Button fullWidth disabled={!canTakeMatches} onClick={() => onTake(match.id)}>
-            {canTakeMatches ? 'לקחת את המשחק' : 'נדרש רישיון בתוקף'}
-          </Button>
-        )
-      )}
+      <Button fullWidth disabled={disabled} aria-busy={isTaking} onClick={() => onTake(match.id)}>
+        {takeButtonLabel(clashes, canTakeMatches, isTaking)}
+      </Button>
     </Card>
   );
 }

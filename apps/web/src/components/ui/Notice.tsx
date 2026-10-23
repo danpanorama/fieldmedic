@@ -1,9 +1,10 @@
 import type { ReactNode } from 'react';
 import { cn } from '../../lib/cn';
 
-type Tone = 'info' | 'warning' | 'danger';
+type Tone = 'success' | 'info' | 'warning' | 'danger';
 
 const tones: Record<Tone, string> = {
+  success: 'bg-brand-50 text-brand-700',
   info: 'bg-sky-50 text-sky-900',
   warning: 'bg-amber-50 text-amber-900',
   danger: 'bg-red-50 text-red-900',

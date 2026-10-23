@@ -1,10 +1,16 @@
 import { Badge, Button, Notice } from '../components/ui';
 import { DEMO_MEDIC_ID } from '../config';
-import { OpenMatchesList, useOpenMatches } from '../features/matches';
+import {
+  OpenMatchesList,
+  takeMatchErrorMessage,
+  useOpenMatches,
+  useTakeMatch,
+} from '../features/matches';
 
 // Pages stay thin: they compose features and handle loading/error states.
 export function OpenMatchesPage() {
   const { data, isPending, isError, refetch } = useOpenMatches(DEMO_MEDIC_ID);
+  const take = useTakeMatch(DEMO_MEDIC_ID);
 
   return (
     <div className="mx-auto min-h-dvh max-w-lg">
@@ -13,6 +19,7 @@ export function OpenMatchesPage() {
           <div>
             {data && <p className="text-sm text-muted">שלום, {data.medic.firstName}</p>}
             <h1 className="text-2xl font-extrabold">משחקים פתוחים</h1>
+            {data && <p className="mt-1 text-sm text-muted">המשחקים שלי: {data.myMatchCount}</p>}
           </div>
           {data &&
             (data.medic.licenseValid ? (
@@ -23,7 +30,10 @@ export function OpenMatchesPage() {
         </div>
       </header>
 
-      <main className="px-4 py-6">
+      <main className="space-y-4 px-4 py-6">
+        {take.isSuccess && <Notice tone="success">המשחק נוסף ללוח שלך ✓</Notice>}
+        {take.isError && <Notice tone="danger">{takeMatchErrorMessage(take.error)}</Notice>}
+
         {isPending && <p className="py-12 text-center text-muted">טוען משחקים…</p>}
 
         {isError && (
@@ -36,7 +46,12 @@ export function OpenMatchesPage() {
         )}
 
         {data && (
-          <OpenMatchesList matches={data.matches} canTakeMatches={data.medic.licenseValid} />
+          <OpenMatchesList
+            matches={data.matches}
+            canTakeMatches={data.medic.licenseValid}
+            onTake={(matchId) => take.mutate(matchId)}
+            takingMatchId={take.isPending ? take.variables : undefined}
+          />
         )}
       </main>
     </div>

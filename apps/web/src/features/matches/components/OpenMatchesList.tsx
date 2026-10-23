@@ -5,7 +5,9 @@ import { MatchCard } from './MatchCard';
 interface OpenMatchesListProps {
   matches: OpenMatchDto[];
   canTakeMatches: boolean;
-  onTake?: (matchId: string) => void;
+  onTake: (matchId: string) => void;
+  /** Id of the match whose take request is in flight, if any. */
+  takingMatchId?: string;
 }
 
 /** Groups matches by calendar day. Matches arrive sorted, so Map insertion order is chronological. */
@@ -18,7 +20,12 @@ function groupByDay(matches: OpenMatchDto[]) {
   return [...days.values()];
 }
 
-export function OpenMatchesList({ matches, canTakeMatches, onTake }: OpenMatchesListProps) {
+export function OpenMatchesList({
+  matches,
+  canTakeMatches,
+  onTake,
+  takingMatchId,
+}: OpenMatchesListProps) {
   if (matches.length === 0) {
     return (
       <p className="py-12 text-center text-muted">אין כרגע משחקים פתוחים. נעדכן כשיתפנה משהו.</p>
@@ -36,6 +43,8 @@ export function OpenMatchesList({ matches, canTakeMatches, onTake }: OpenMatches
               match={match}
               canTakeMatches={canTakeMatches}
               onTake={onTake}
+              isTaking={takingMatchId === match.id}
+              isBusy={takingMatchId !== undefined && takingMatchId !== match.id}
             />
           ))}
         </section>

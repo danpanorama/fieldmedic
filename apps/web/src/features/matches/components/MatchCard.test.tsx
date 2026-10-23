@@ -25,7 +25,7 @@ const makeMatch = (fit: FitDto): OpenMatchDto => ({
 
 describe('MatchCard', () => {
   it('shows the match details', () => {
-    render(<MatchCard match={makeMatch({ kind: 'free' })} canTakeMatches />);
+    render(<MatchCard match={makeMatch({ kind: 'free' })} canTakeMatches onTake={vi.fn()} />);
     expect(screen.getByRole('heading', { name: "נערים ב' · ליגה ארצית" })).toBeInTheDocument();
     expect(screen.getByText('מגרש רוממה, חיפה')).toBeInTheDocument();
     expect(screen.getByText('₪350')).toBeInTheDocument();
@@ -38,7 +38,7 @@ describe('MatchCard', () => {
       travelMinutes: 15,
       other: held,
     };
-    render(<MatchCard match={makeMatch(fit)} canTakeMatches />);
+    render(<MatchCard match={makeMatch(fit)} canTakeMatches onTake={vi.fn()} />);
     expect(screen.getByRole('status')).toHaveTextContent(/רצף אפשרי.*09:45.*15 דק'/);
   });
 
@@ -61,5 +61,24 @@ describe('MatchCard', () => {
       <MatchCard match={makeMatch({ kind: 'free' })} canTakeMatches={false} onTake={vi.fn()} />,
     );
     expect(screen.getByRole('button', { name: 'נדרש רישיון בתוקף' })).toBeDisabled();
+  });
+
+  it('shows a saving state and blocks double taps while the request is in flight', () => {
+    const onTake = vi.fn();
+    render(
+      <MatchCard match={makeMatch({ kind: 'free' })} canTakeMatches onTake={onTake} isTaking />,
+    );
+    const button = screen.getByRole('button', { name: 'שומר…' });
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('aria-busy', 'true');
+    fireEvent.click(button);
+    expect(onTake).not.toHaveBeenCalled();
+  });
+
+  it('is disabled while another match is being taken', () => {
+    render(
+      <MatchCard match={makeMatch({ kind: 'free' })} canTakeMatches onTake={vi.fn()} isBusy />,
+    );
+    expect(screen.getByRole('button', { name: 'לקחת את המשחק' })).toBeDisabled();
   });
 });
