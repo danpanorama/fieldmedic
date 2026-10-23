@@ -2,13 +2,14 @@
 
 **Self-scheduling for football match medics.** Medics see open matches near them and assign themselves. The system blocks clashes (including travel time between venues), suggests back-to-back matches, and helps coordinators fill last-minute gaps.
 
-> 🚧 In active development: Sprint 0 (foundation) done. Product spec: [docs/PRODUCT.md](docs/PRODUCT.md)
+> 🚧 In active development: Sprint 1 (self-assignment) in review. Product spec: [docs/PRODUCT.md](docs/PRODUCT.md)
 
 ## What works today
 
 - **Scheduling engine:** decides whether a match is _free_, a _clash_ (time overlap or not enough time to drive), or _back-to-back_ with a match the medic already holds
 - **API:** `GET /api/medics/:id/open-matches` returns open matches with a fit for each, from demo data
-- **Web:** mobile-first Hebrew (RTL) "open matches" screen
+- **Taking a match:** `POST /api/medics/:id/assignments`, safe when two medics tap at the same moment ([ADR 0003](docs/adr/0003-atomic-match-claim.md))
+- **Web:** mobile-first Hebrew (RTL) "open matches" screen with one-tap self-assignment
 
 ## Tech stack
 
