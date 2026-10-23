@@ -1,0 +1,25 @@
+name: Feature
+description: A new capability for medics, coordinators or admins
+labels: [feature]
+body:
+  - type: textarea
+    id: story
+    attributes:
+      label: User story
+      placeholder: As a medic, I want to … so that …
+    validations:
+      required: true
+  - type: textarea
+    id: done
+    attributes:
+      label: Definition of done
+      description: Checklist that must be true before this is closed
+      placeholder: |
+        - [ ] …
+        - [ ] Tests cover the main and edge cases
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Notes / design
